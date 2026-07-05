@@ -1,0 +1,15 @@
+.app-header {
+  background-color: #b41313 !important;
+  background: linear-gradient(90deg, #b41313 0%, #e64545 100%) !important;
+  color: #ffffff !important;
+  width: 100% !important;
+  padding: 16px 24px !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 99999 !important;
+}
+
+.app-header .header-title,
+.app-header .header-subtitle {
+  color: #ffffff !important;
+}

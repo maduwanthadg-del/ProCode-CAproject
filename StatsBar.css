@@ -1,0 +1,132 @@
+/* StatsBar.css */
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap');
+
+/* ─── Tokens ─────────────────────────────────────────────── */
+:root {
+  --color-primary:        #d42b2b;
+  --color-success:        #2e7d32;
+  --color-info:           #1565c0;
+  --color-muted-fg:       #6b6060;
+  --color-card-bg:        #ffffff;
+  --color-muted-bg:       #f7f3f3;
+  --color-border:         #e2d9d9;
+}
+
+/* ─── Wrapper ────────────────────────────────────────────── */
+.stats-bar {
+  background: linear-gradient(180deg, #fff 0%, #fdf6f6 100%);
+  border-bottom: 1px solid var(--color-border);
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ─── Inner container ────────────────────────────────────── */
+.stats-bar__container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px 20px 22px;
+}
+
+/* ─── Heading row ────────────────────────────────────────── */
+.stats-bar__heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.stats-bar__heading-icon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.stats-bar__heading-text {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--color-muted-fg);
+}
+
+/* ─── Grid ───────────────────────────────────────────────── */
+.stats-bar__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+@media (min-width: 480px) {
+  .stats-bar__grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 900px) {
+  .stats-bar__grid { grid-template-columns: repeat(6, 1fr); }
+}
+
+/* ─── Individual stat card ───────────────────────────────── */
+.stats-bar__card {
+  background: var(--color-muted-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 14px 12px 12px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stats-bar__card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+}
+
+/* Subtle top accent line per card */
+.stats-bar__card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 14px 14px 0 0;
+  background: var(--card-accent, var(--color-primary));
+  opacity: 0.65;
+}
+
+/* ─── Card icon + label row ──────────────────────────────── */
+.stats-bar__card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.stats-bar__icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Icon colour helpers (matching Tailwind classes in JSX) */
+.text-primary { color: var(--color-primary); }
+.text-success  { color: var(--color-success); }
+.text-info     { color: var(--color-info); }
+
+.stats-bar__label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-muted-fg);
+  line-height: 1.35;
+}
+
+/* ─── Value ──────────────────────────────────────────────── */
+.stats-bar__value {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #1a1a1a;
+  margin: 0 0 3px;
+}
+
+/* ─── Trend ──────────────────────────────────────────────── */
+.stats-bar__trend {
+  font-size: 10px;
+  color: var(--color-muted-fg);
+  margin: 0;
+}

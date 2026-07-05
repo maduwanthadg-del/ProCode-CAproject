@@ -1,55 +1,81 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './Login.css'; // Make sure to import the CSS file
 
 export default function Login() {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const handleChange = (e) => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(''); // Clear previous errors
+    
     try {
       const res = await axios.post('http://localhost:5000/api/auth/login', credentials);
       if (res.data.success) {
-        // Save user info to keep them logged in
+        // Store user role (Police/Hospital) for the dashboard
         localStorage.setItem('user', JSON.stringify(res.data.user));
         navigate('/dashboard');
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Login Failed");
+      // Look for a specific backend message, otherwise use a default
+      setError(err.response?.data?.message || "Unauthorized Access: Invalid Credentials");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="form-container">
-      <div className="card" style={{ marginTop: '50px' }}>
-        <h2 style={{ color: 'var(--primary-red)', textAlign: 'center' }}>Authority Login</h2>
-        {error && <p style={{ color: 'red', textAlign: 'center', fontSize: '14px' }}>{error}</p>}
+    <div className="login-wrapper">
+      <div className="login-card">
         
-        <form onSubmit={handleLogin}>
-          <div style={{ marginBottom: '15px' }}>
-            <label>Badge ID / Username</label>
-            <input 
-              type="text" 
-              className="choice-btn" 
-              style={{ width: '100%', textAlign: 'left' }}
-              onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
-              required 
-            />
-          </div>
-          <div style={{ marginBottom: '20px' }}>
-            <label>Password</label>
-            <input 
-              type="password" 
-              className="choice-btn" 
-              style={{ width: '100%', textAlign: 'left' }}
-              onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-              required 
-            />
-          </div>
-          <button type="submit" className="btn-submit">LOGIN TO COMMAND CENTER</button>
+        <div className="login-header">
+          <h2 className="login-title">Authority Login</h2>
+          <p className="login-subtitle">Sri Lanka Emergency Response System</p>
+        </div>
+        
+        {/* Clean Error Banner instead of standard browser alert */}
+        {error && <div className="error-banner">{error}</div>}
+        
+        <form onSubmit={handleLogin} className="login-form">
+          <input 
+            type="text" 
+            name="username"
+            placeholder="Username / Badge ID" 
+            className="form-input" 
+            value={credentials.username}
+            onChange={handleChange}
+            required
+            disabled={loading}
+          />
+          <input 
+            type="password" 
+            name="password"
+            placeholder="Secure Password" 
+            className="form-input" 
+            value={credentials.password}
+            onChange={handleChange}
+            required
+            disabled={loading}
+          />
+          <button type="submit" className="btn-submit" disabled={loading}>
+            {loading ? 'AUTHENTICATING...' : 'ACCESS COMMAND CENTER'}
+          </button>
         </form>
+        
+        <div className="login-footer">
+          <span className="lock-icon">🔒</span>
+          <p>Restricted to Police and Hospital personnel only.</p>
+        </div>
+
       </div>
     </div>
   );
